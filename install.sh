@@ -1,5 +1,9 @@
 #!/bin/bash
 
+checkPythonVersion() {
+	echo "Depends on python 2.7"
+}
+
 installBluezDependencies() {
 	sdp_exists=$(which sdptool)
 
@@ -54,6 +58,7 @@ modifyDbusPath() {
 	fi
 }
 
+checkPythonVersion
 installBluezDependencies
 checkForhci0Device
 modifyDbusPath
