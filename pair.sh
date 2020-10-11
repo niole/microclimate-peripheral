@@ -15,8 +15,13 @@ expect "Agent registered"
 send "default-agent\r"
 expect "Default agent request successful"
 expect  "Request confirmation"
+sleep 3
 send "yes\r"
-#sleep 3
-interact
-
+sleep 3
+send "yes\r"
+sleep 3
+send "yes\r"
+sleep 3
+send "yes\r"
+send "quit\r"
 expect eof

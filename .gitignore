@@ -1,2 +1,4 @@
 *.pyc
 *.log
+save_pid.txt
+save_setup_peripheral_pid.txt

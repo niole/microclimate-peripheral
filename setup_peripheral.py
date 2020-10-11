@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 
-import RPi.GPIO as GPIO
 import json
-import os
-from device import receive_data
 import logging
+import os
+import subprocess
 import time
+import RPi.GPIO as GPIO
+from device import receive_data
 
 logging.basicConfig(level=logging.DEBUG)
 pairing_trigger_channel = 19
@@ -16,6 +17,8 @@ try:
 	GPIO.setup(pairing_trigger_channel, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 	def enable_limited_discoverability(channel):
+		logging.info("Spawning pairing session")
+		subprocess.Popen(['./pair.sh'])
 		logging.info("Waiting for peripheral setup information")
 		setup_details = receive_data()
 
