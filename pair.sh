@@ -1,5 +1,10 @@
 #!/usr/bin/expect
 
+# this works by opening a limited time session with bluetoothctl,
+# assuming that a connect request comes in immediately after
+# and then replies a bunch of times over ther course of 30 seconds
+# which is the default timeout for the bluetooth server
+
 set prompt "#"
 spawn sudo bluetoothctl -a
 
@@ -15,6 +20,18 @@ expect "Agent registered"
 send "default-agent\r"
 expect "Default agent request successful"
 expect  "Request confirmation"
+sleep 3
+send "yes\r"
+sleep 3
+send "yes\r"
+sleep 3
+send "yes\r"
+sleep 3
+send "yes\r"
+sleep 3
+send "yes\r"
+sleep 3
+send "yes\r"
 sleep 3
 send "yes\r"
 sleep 3
