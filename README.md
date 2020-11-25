@@ -4,7 +4,13 @@
 ./install.sh
 ```
 
-# run
+# prod
+
+```
+./one_time_setup.sh
+```
+
+# dev
 
 ```ssh
 ./start_all.sh
@@ -15,4 +21,3 @@
 ```ssh
 ./kill_all.sh
 ```
-
