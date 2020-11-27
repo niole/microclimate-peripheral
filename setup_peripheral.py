@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3.5
 
 import json
 import logging
@@ -22,14 +22,13 @@ try:
 		logging.info("Waiting for peripheral setup information")
 		setup_details = receive_data()
 
-		if setup_details != None:
-			logging.info("Received setup details: {setup_details}. Exporting for use".format(setup_details=setup_details))
+		logging.info("Received setup details: {setup_details}. Exporting for use".format(setup_details=setup_details))
 
-			#parsed_details = json.loads(setup_details)
-			#host = parsed_details['host']
-			host = "ec2-35-161-83-246.us-west-2.compute.amazonaws.com"
+		if setup_details != None:
+			decoded_details = setup_details.decode("utf-8")
+			logging.info(decoded_details)
 			with open("/tmp/host.txt", "w") as f:
-				f.write(host)
+				f.write(decoded_details)
 		else:
 			logging.warn("Setup details was empty: {setup_details}".format(setup_details=setup_details))
 

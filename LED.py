@@ -3,13 +3,11 @@
 import RPi.GPIO as GPIO
 import dht11
 import json
-import math
-import requests
-import subprocess
 import os
 import time
 from device import receive_data
 import logging
+from send_event import send_event
 
 MAX_TRIES = 10
 TRY_SLEEP_SECONDS = 0.1
@@ -22,36 +20,34 @@ host_file = "/tmp/host.txt"
 
 class PeripheralRequestHandler:
 	def __init__(self):
-		self.host = None
+		self.request_details = None
 
-	def get_host(self):
-		if self.host == None:
+	def get_request_details(self):
+		if self.request_details == None:
 			try:
 				with open(host_file, "r") as f:
-					host = f.read()
-					if host != "":
-						self.host = host
+					unparsed_details = f.read()
+					if unparsed_details != "":
+						try:
+							logging.info(unparsed_details)
+							self.request_details = json.loads(unparsed_details)
+						except Exception as e:
+							logging.error("Failed to parse details from file. {error}".format(error=e))
 					else:
 						logging.warn("Tried to read new host from host file, file was empty.")
 			except Exception as error:
 				logging.warn("Failed to read host from host file: {error}".format(error=error))
-		return self.host
+		return self.request_details
 
 	def send_request(self, microclimate_key, temperature):
 		try:
-			host = self.get_host()
-			url = "https://{host}/floorplan/apte".format(host=host)
-
-			logging.info("Sending request %s" % microclimate_key)
-			body = json.dumps({
-				'key': microclimate_key,
-				'value': temperature,
-				'createdAt': math.floor(time.time()*1000)
-			})
-			headers = {
-				'Content-Type': 'application/json'
-			}
-			post_response = requests.post(url, data=body, headers=headers)
+			details = self.get_request_details()
+			send_event(
+				domain=details['domain'],
+				peripheralId=details['peripheralId'],
+				deploymentId=details['deploymentId'],
+				value=temperature
+			)
 		except Exception as error:
 			logging.warn("Failed to send peripheral event: {error}".format(error=error))
 
