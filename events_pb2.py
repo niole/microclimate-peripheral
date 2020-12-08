@@ -21,7 +21,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z\014api/protobuf',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x0c\x65vents.proto\x12\x03\x61pi\x1a\x0b\x65mpty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x89\x01\n\x10MeasurementEvent\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cperipheralId\x18\x02 \x01(\t\x12\x14\n\x0c\x64\x65ploymentId\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\x02\x12.\n\ntime_stamp\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x80\x01\n\x13NewMeasurementEvent\x12\x14\n\x0cperipheralId\x18\x01 \x01(\t\x12\x14\n\x0c\x64\x65ploymentId\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12.\n\ntime_stamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xa9\x01\n\x1dMeasurementEventFilterRequest\x12\x14\n\x0cperipheralId\x18\x01 \x01(\t\x12\x14\n\x0c\x64\x65ploymentId\x18\x02 \x01(\t\x12.\n\nstart_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp2\xa3\x01\n!PeripheralMeasurementEventService\x12\x31\n\tSendEvent\x12\x18.api.NewMeasurementEvent\x1a\n.api.Empty\x12K\n\x0c\x46ilterEvents\x12\".api.MeasurementEventFilterRequest\x1a\x15.api.MeasurementEvent0\x01\x42\x0eZ\x0c\x61pi/protobufb\x06proto3'
+  serialized_pb=b'\n\x0c\x65vents.proto\x12\x03\x61pi\x1a\x0b\x65mpty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x89\x01\n\x10MeasurementEvent\x12\n\n\x02id\x18\x01 \x01(\t\x12\x14\n\x0cperipheralId\x18\x02 \x01(\t\x12\x14\n\x0c\x64\x65ploymentId\x18\x03 \x01(\t\x12\r\n\x05value\x18\x04 \x01(\x02\x12.\n\ntime_stamp\x18\x05 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\x80\x01\n\x13NewMeasurementEvent\x12\x14\n\x0cperipheralId\x18\x01 \x01(\t\x12\x14\n\x0c\x64\x65ploymentId\x18\x02 \x01(\t\x12\r\n\x05value\x18\x03 \x01(\x02\x12.\n\ntime_stamp\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"\xa9\x01\n\x1dMeasurementEventFilterRequest\x12\x14\n\x0cperipheralId\x18\x01 \x01(\t\x12\x14\n\x0c\x64\x65ploymentId\x18\x02 \x01(\t\x12.\n\nstart_time\x18\x03 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\x12,\n\x08\x65nd_time\x18\x04 \x01(\x0b\x32\x1a.google.protobuf.Timestamp\"5\n\x1d\x44\x65letePeripheralEventsRequest\x12\x14\n\x0cperipheralId\x18\x01 \x01(\t\"<\n$MostRecentEventsForDeploymentRequest\x12\x14\n\x0c\x64\x65ploymentId\x18\x01 \x01(\t2\xcf\x02\n!PeripheralMeasurementEventService\x12\x31\n\tSendEvent\x12\x18.api.NewMeasurementEvent\x1a\n.api.Empty\x12K\n\x0c\x46ilterEvents\x12\".api.MeasurementEventFilterRequest\x1a\x15.api.MeasurementEvent0\x01\x12H\n\x16\x44\x65letePeripheralEvents\x12\".api.DeletePeripheralEventsRequest\x1a\n.api.Empty\x12`\n\x1aMostRecentDeploymentEvents\x12).api.MostRecentEventsForDeploymentRequest\x1a\x15.api.MeasurementEvent0\x01\x42\x0eZ\x0c\x61pi/protobufb\x06proto3'
   ,
   dependencies=[empty__pb2.DESCRIPTOR,google_dot_protobuf_dot_timestamp__pb2.DESCRIPTOR,])
 
@@ -193,6 +193,70 @@ _MEASUREMENTEVENTFILTERREQUEST = _descriptor.Descriptor(
   serialized_end=508,
 )
 
+
+_DELETEPERIPHERALEVENTSREQUEST = _descriptor.Descriptor(
+  name='DeletePeripheralEventsRequest',
+  full_name='api.DeletePeripheralEventsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='peripheralId', full_name='api.DeletePeripheralEventsRequest.peripheralId', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=510,
+  serialized_end=563,
+)
+
+
+_MOSTRECENTEVENTSFORDEPLOYMENTREQUEST = _descriptor.Descriptor(
+  name='MostRecentEventsForDeploymentRequest',
+  full_name='api.MostRecentEventsForDeploymentRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='deploymentId', full_name='api.MostRecentEventsForDeploymentRequest.deploymentId', index=0,
+      number=1, type=9, cpp_type=9, label=1,
+      has_default_value=False, default_value=b"".decode('utf-8'),
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=565,
+  serialized_end=625,
+)
+
 _MEASUREMENTEVENT.fields_by_name['time_stamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _NEWMEASUREMENTEVENT.fields_by_name['time_stamp'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
 _MEASUREMENTEVENTFILTERREQUEST.fields_by_name['start_time'].message_type = google_dot_protobuf_dot_timestamp__pb2._TIMESTAMP
@@ -200,6 +264,8 @@ _MEASUREMENTEVENTFILTERREQUEST.fields_by_name['end_time'].message_type = google_
 DESCRIPTOR.message_types_by_name['MeasurementEvent'] = _MEASUREMENTEVENT
 DESCRIPTOR.message_types_by_name['NewMeasurementEvent'] = _NEWMEASUREMENTEVENT
 DESCRIPTOR.message_types_by_name['MeasurementEventFilterRequest'] = _MEASUREMENTEVENTFILTERREQUEST
+DESCRIPTOR.message_types_by_name['DeletePeripheralEventsRequest'] = _DELETEPERIPHERALEVENTSREQUEST
+DESCRIPTOR.message_types_by_name['MostRecentEventsForDeploymentRequest'] = _MOSTRECENTEVENTSFORDEPLOYMENTREQUEST
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 MeasurementEvent = _reflection.GeneratedProtocolMessageType('MeasurementEvent', (_message.Message,), {
@@ -223,6 +289,20 @@ MeasurementEventFilterRequest = _reflection.GeneratedProtocolMessageType('Measur
   })
 _sym_db.RegisterMessage(MeasurementEventFilterRequest)
 
+DeletePeripheralEventsRequest = _reflection.GeneratedProtocolMessageType('DeletePeripheralEventsRequest', (_message.Message,), {
+  'DESCRIPTOR' : _DELETEPERIPHERALEVENTSREQUEST,
+  '__module__' : 'events_pb2'
+  # @@protoc_insertion_point(class_scope:api.DeletePeripheralEventsRequest)
+  })
+_sym_db.RegisterMessage(DeletePeripheralEventsRequest)
+
+MostRecentEventsForDeploymentRequest = _reflection.GeneratedProtocolMessageType('MostRecentEventsForDeploymentRequest', (_message.Message,), {
+  'DESCRIPTOR' : _MOSTRECENTEVENTSFORDEPLOYMENTREQUEST,
+  '__module__' : 'events_pb2'
+  # @@protoc_insertion_point(class_scope:api.MostRecentEventsForDeploymentRequest)
+  })
+_sym_db.RegisterMessage(MostRecentEventsForDeploymentRequest)
+
 
 DESCRIPTOR._options = None
 
@@ -233,8 +313,8 @@ _PERIPHERALMEASUREMENTEVENTSERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=511,
-  serialized_end=674,
+  serialized_start=628,
+  serialized_end=963,
   methods=[
   _descriptor.MethodDescriptor(
     name='SendEvent',
@@ -252,6 +332,26 @@ _PERIPHERALMEASUREMENTEVENTSERVICE = _descriptor.ServiceDescriptor(
     index=1,
     containing_service=None,
     input_type=_MEASUREMENTEVENTFILTERREQUEST,
+    output_type=_MEASUREMENTEVENT,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='DeletePeripheralEvents',
+    full_name='api.PeripheralMeasurementEventService.DeletePeripheralEvents',
+    index=2,
+    containing_service=None,
+    input_type=_DELETEPERIPHERALEVENTSREQUEST,
+    output_type=empty__pb2._EMPTY,
+    serialized_options=None,
+    create_key=_descriptor._internal_create_key,
+  ),
+  _descriptor.MethodDescriptor(
+    name='MostRecentDeploymentEvents',
+    full_name='api.PeripheralMeasurementEventService.MostRecentDeploymentEvents',
+    index=3,
+    containing_service=None,
+    input_type=_MOSTRECENTEVENTSFORDEPLOYMENTREQUEST,
     output_type=_MEASUREMENTEVENT,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,

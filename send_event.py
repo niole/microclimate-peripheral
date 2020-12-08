@@ -18,11 +18,3 @@ def send_event(domain, peripheralId, deploymentId, value):
 				time_stamp=time_stamp
 			)
 		)
-
-send_event(
-	domain='192.168.1.162:6004',
-	peripheralId='48a1e1f2-f977-424a-b22a-c6292f363447',
-	deploymentId='f0083ac5-3026-11eb-a801-0242ac1e0002',
-	value=34
-)
-

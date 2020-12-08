@@ -9,6 +9,11 @@ from device import receive_data
 import logging
 from send_event import send_event
 
+import peripheral_pb2
+import peripheral_pb2_grpc
+import google
+import grpc
+
 MAX_TRIES = 10
 TRY_SLEEP_SECONDS = 0.1
 
@@ -28,8 +33,9 @@ class PeripheralRequestHandler:
 				with open(host_file, "r") as f:
 					unparsed_details = f.read()
 					if unparsed_details != "":
+						logging.info("Received pairing details")
+
 						try:
-							logging.info(unparsed_details)
 							self.request_details = json.loads(unparsed_details)
 						except Exception as e:
 							logging.error("Failed to parse details from file. {error}".format(error=e))
@@ -39,11 +45,47 @@ class PeripheralRequestHandler:
 				logging.warn("Failed to read host from host file: {error}".format(error=error))
 		return self.request_details
 
+	"""
+	links the peripheral to this hardware if not already linked
+	throws when something goes wrong
+	"""
+	def request_link(self, domain, deployment_id, hardware_id):
+		channel = grpc.insecure_channel(domain)
+		stub = peripheral_pb2_grpc.PeripheralManagementServiceStub(channel)
+		# this code just demonstrates how you could do this
+		# we receive the perfid in the pair request
+		peripherals = stub.GetDeploymentPeripherals(peripheral_pb2.GetDeploymentPeripheralsRequest(
+			deploymentId=deployment_id
+		))
+
+		livingroom_perf = next((p for p in peripherals if p.name == "livingroom"), None)
+		if livingroom_perf != None:
+			stub.LinkHardware(peripheral_pb2.LinkHardwareRequest(
+				hardwareId=hardware_id,
+				peripheralId=livingroom_perf.id
+			))
+		else:
+			raise Exception(
+				"Couldn't find livingroom peripheral in received list for deployment {id}".format(id=deployment_id)
+			)
+
 	def send_request(self, microclimate_key, temperature):
 		try:
 			details = self.get_request_details()
+			# TODO make sure that we're still paired with the livingroom peripheral
+			# then on success, send request
+
+			if details == None:
+				raise Exception("Data for request doesnt exist yet. Pair something with this device.")
+
+			self.request_link(
+				details['peripheralServiceDomain'],
+				details['deploymentId'],
+				details['hardwareId']
+			)
+
 			send_event(
-				domain=details['domain'],
+				domain=details['eventServiceDomain'],
 				peripheralId=details['peripheralId'],
 				deploymentId=details['deploymentId'],
 				value=temperature

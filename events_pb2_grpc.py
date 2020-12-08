@@ -25,6 +25,16 @@ class PeripheralMeasurementEventServiceStub(object):
                 request_serializer=events__pb2.MeasurementEventFilterRequest.SerializeToString,
                 response_deserializer=events__pb2.MeasurementEvent.FromString,
                 )
+        self.DeletePeripheralEvents = channel.unary_unary(
+                '/api.PeripheralMeasurementEventService/DeletePeripheralEvents',
+                request_serializer=events__pb2.DeletePeripheralEventsRequest.SerializeToString,
+                response_deserializer=empty__pb2.Empty.FromString,
+                )
+        self.MostRecentDeploymentEvents = channel.unary_stream(
+                '/api.PeripheralMeasurementEventService/MostRecentDeploymentEvents',
+                request_serializer=events__pb2.MostRecentEventsForDeploymentRequest.SerializeToString,
+                response_deserializer=events__pb2.MeasurementEvent.FromString,
+                )
 
 
 class PeripheralMeasurementEventServiceServicer(object):
@@ -42,6 +52,18 @@ class PeripheralMeasurementEventServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeletePeripheralEvents(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def MostRecentDeploymentEvents(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_PeripheralMeasurementEventServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +75,16 @@ def add_PeripheralMeasurementEventServiceServicer_to_server(servicer, server):
             'FilterEvents': grpc.unary_stream_rpc_method_handler(
                     servicer.FilterEvents,
                     request_deserializer=events__pb2.MeasurementEventFilterRequest.FromString,
+                    response_serializer=events__pb2.MeasurementEvent.SerializeToString,
+            ),
+            'DeletePeripheralEvents': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeletePeripheralEvents,
+                    request_deserializer=events__pb2.DeletePeripheralEventsRequest.FromString,
+                    response_serializer=empty__pb2.Empty.SerializeToString,
+            ),
+            'MostRecentDeploymentEvents': grpc.unary_stream_rpc_method_handler(
+                    servicer.MostRecentDeploymentEvents,
+                    request_deserializer=events__pb2.MostRecentEventsForDeploymentRequest.FromString,
                     response_serializer=events__pb2.MeasurementEvent.SerializeToString,
             ),
     }
@@ -95,6 +127,40 @@ class PeripheralMeasurementEventService(object):
             metadata=None):
         return grpc.experimental.unary_stream(request, target, '/api.PeripheralMeasurementEventService/FilterEvents',
             events__pb2.MeasurementEventFilterRequest.SerializeToString,
+            events__pb2.MeasurementEvent.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeletePeripheralEvents(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/api.PeripheralMeasurementEventService/DeletePeripheralEvents',
+            events__pb2.DeletePeripheralEventsRequest.SerializeToString,
+            empty__pb2.Empty.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def MostRecentDeploymentEvents(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_stream(request, target, '/api.PeripheralMeasurementEventService/MostRecentDeploymentEvents',
+            events__pb2.MostRecentEventsForDeploymentRequest.SerializeToString,
             events__pb2.MeasurementEvent.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
