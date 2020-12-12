@@ -1,4 +1,4 @@
 #!/bin/bash
-nohup ./setup_peripheral.py > /tmp/peripheral.log 2>&1 &
+nohup ./setup_peripheral.py &
 
 echo $! > save_setup_peripheral_pid.txt
