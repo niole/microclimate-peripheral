@@ -26,7 +26,6 @@ try:
 
 		if setup_details != None:
 			decoded_details = setup_details.decode("utf-8")
-			logging.info(decoded_details)
 			with open("/tmp/host.txt", "w") as f:
 				f.write(decoded_details)
 		else:

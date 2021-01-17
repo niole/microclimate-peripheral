@@ -1,2 +1,2 @@
 #!/bin/bash
-nohup ./setup_peripheral.py >/dev/null 2>&1 &
+nohup ./setup_peripheral.py > /tmp/server.log &
