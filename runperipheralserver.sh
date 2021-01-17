@@ -1,4 +1,2 @@
 #!/bin/bash
-nohup ./setup_peripheral.py &
-
-echo $! > save_setup_peripheral_pid.txt
+nohup ./setup_peripheral.py >/dev/null 2>&1 &

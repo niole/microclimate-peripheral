@@ -1,8 +1,8 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
+source ./env_vars.sh
 
 python3.5 -m pip install -r requirements.txt
 
-nohup ./runpi.sh &
-echo $! > save_pid.txt
-
+./run_led.sh
 ./runperipheralserver.sh

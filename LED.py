@@ -8,6 +8,7 @@ import time
 from device import receive_data
 import logging
 from send_event import send_event
+from jwt_gen import generate_jwt
 
 import peripheral_pb2
 import peripheral_pb2_grpc
@@ -17,9 +18,16 @@ import grpc
 MAX_TRIES = 10
 TRY_SLEEP_SECONDS = 0.1
 
+service_account_path = os.environ['SERVICE_ACCOUNT_PATH']
+iss = os.environ['JWT_ISSUER']
+aud = os.environ['PERIPH_AUD']
+timeout = 60
+
 heat_sensors = [(22, "apte-livingroom")]
 measurement_trigger_channel = 6
 liveness_check_channel = 26
+
+credentials = grpc.ssl_channel_credentials()
 
 host_file = "/tmp/host.txt"
 
@@ -50,13 +58,18 @@ class PeripheralRequestHandler:
 	throws when something goes wrong
 	"""
 	def request_link(self, domain, deployment_id, hardware_id, peripheral_id):
-		channel = grpc.insecure_channel(domain)
+		channel = grpc.secure_channel(domain, credentials)
 		stub = peripheral_pb2_grpc.PeripheralManagementServiceStub(channel)
-
-		stub.LinkHardware(peripheral_pb2.LinkHardwareRequest(
-			hardwareId=hardware_id,
-			peripheralId=peripheral_id
-		))
+		auth_token = generate_jwt(service_account_path, iss, aud)
+		metadata = [('authorization', 'Bearer ' + auth_token)]
+		stub.LinkHardware(
+			peripheral_pb2.LinkHardwareRequest(
+				hardwareId=hardware_id,
+				peripheralId=peripheral_id
+			),
+			timeout,
+			metadata = metadata
+		)
 
 	def send_request(self, microclimate_key, temperature):
 		try:
@@ -80,6 +93,7 @@ class PeripheralRequestHandler:
 				deploymentId=details['deploymentId'],
 				value=temperature
 			)
+
 		except Exception as error:
 			logging.warn("Failed to send peripheral event: {error}".format(error=error))
 
