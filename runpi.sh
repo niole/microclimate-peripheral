@@ -1,2 +1,2 @@
 #!/bin/bash
-python3.5 ./LED.py
+python3.7 ./LED.py

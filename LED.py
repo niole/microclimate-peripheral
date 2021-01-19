@@ -1,14 +1,14 @@
-#!/usr/bin/env python
-
 import RPi.GPIO as GPIO
 import dht11
 import json
 import os
+import requests
 import time
 from device import receive_data
 import logging
 from send_event import send_event
 from jwt_gen import generate_jwt
+from wifi_connection import update_profile
 
 import peripheral_pb2
 import peripheral_pb2_grpc
@@ -31,9 +31,30 @@ credentials = grpc.ssl_channel_credentials()
 
 host_file = "/tmp/host.txt"
 
+def get_ssid_from_details(details):
+	if 'ssid' in details:
+		return details['ssid']
+	else:
+		raise Exception('ssid not provided in configuration')
+
+def get_key_from_details(details):
+	if 'wifi_key' in details:
+		return details['wifi_key']
+	else:
+		raise Exception('wifi key not found in details')
+
 class PeripheralRequestHandler:
 	def __init__(self):
 		self.request_details = None
+		self.is_wifi_connected = self.get_is_wifi_connected()
+
+	def get_is_wifi_connected(self):
+		try:
+			requests.get('https://www.google.com', timeout=5)
+			return True
+		except Exception as e:
+			logging.warn(f"Cannot reach google.com: {e}")
+			return False
 
 	def get_request_details(self):
 		if self.request_details == None:
@@ -79,6 +100,15 @@ class PeripheralRequestHandler:
 
 			if details == None:
 				raise Exception("Data for request doesnt exist yet. Pair something with this device.")
+
+			if not self.is_wifi_connected:
+				ssid = get_ssid_from_details(details)
+				passkey = get_key_from_details(details)
+				update_profile(ssid, passkey)
+
+				self.is_wifi_connected = self.get_is_wifi_connected()
+				if not self.is_wifi_connected:
+					raise Exception("Attempted to connect to wifi and failed. aborting")
 
 			self.request_link(
 				details['peripheralServiceDomain'],

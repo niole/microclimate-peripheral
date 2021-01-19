@@ -2,35 +2,8 @@
 
 sudo apt-get update
 
-checkPythonVersion() {
-	if [ ! $(which python3.5) ]
-	then
-		echo "Installing python 3.5
-		echo "https://gist.github.com/BMeu/af107b1f3d7cf1a2507c9c6429367a3b"
-
-		sudo apt-get install build-essential tk-dev libncurses5-dev \
-		libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev \
-		libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev
-
-		wget https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tgz
-		tar zxvf Python-3.5.2.tgz
-		cd Python-3.5.2
-		./configure --prefix=/usr/local/opt/python-3.5.2
-		make
-		export LC_ALL=C
-		sudo make install
-
-		sudo ln -s /usr/local/opt/python-3.5.2/bin/pydoc3.5 /usr/bin/pydoc3.5
-		sudo ln -s /usr/local/opt/python-3.5.2/bin/python3.5 /usr/bin/python3.5
-		sudo ln -s /usr/local/opt/python-3.5.2/bin/python3.5m /usr/bin/python3.5m
-		sudo ln -s /usr/local/opt/python-3.5.2/bin/pyvenv-3.5 /usr/bin/pyvenv-3.5
-		sudo ln -s /usr/local/opt/python-3.5.2/bin/pip3.5 /usr/bin/pip3.5
-	fi
-
-	if [ ! $(which python3.5) ]
-	then
-		echo "Failed to install python 3.5"
-	fi
+installPython() {
+	./install_python37.sh
 }
 
 installBluezDependencies() {
@@ -92,7 +65,13 @@ installPythonDeps()
 	python3.5 -m pip install -r requirements.txt
 }
 
-checkPythonVersion
+installWifiDependencies()
+{
+	sudo apt-get install wpasupplicant
+}
+
+installPython
+installWifiDependencies
 installBluezDependencies
 checkForhci0Device
 modifyDbusPath
