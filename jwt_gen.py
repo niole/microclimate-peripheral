@@ -16,7 +16,6 @@ def generate_jwt(service_account_file, issuer, audiences):
     with open(service_account_file, 'r') as fh:
         service_account_info = json.load(fh)
 
-    print(service_account_info)
     signer = google.auth.crypt.RSASigner.from_string(
             service_account_info['private_key'],
             service_account_info['private_key_id']
@@ -39,5 +38,4 @@ def generate_jwt(service_account_file, issuer, audiences):
     }
 
     signed_jwt = google.auth.jwt.encode(signer, payload)
-    #return signed_jwt
     return signed_jwt.decode('utf-8')

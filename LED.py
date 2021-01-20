@@ -15,6 +15,8 @@ import peripheral_pb2_grpc
 import google
 import grpc
 
+logging.basicConfig(level=logging.DEBUG)
+
 MAX_TRIES = 10
 TRY_SLEEP_SECONDS = 0.1
 
