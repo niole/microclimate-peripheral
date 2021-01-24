@@ -1,3 +1,3 @@
 #!/bin/bash
 
-nohup ./runpi.sh > /tmp/led.log &
+nohup python3.7 ./LED.py 2>&1 &

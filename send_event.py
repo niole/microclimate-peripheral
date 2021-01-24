@@ -2,9 +2,13 @@ import events_pb2
 import events_pb2_grpc
 import google
 import grpc
+import logging
 import json
 from jwt_gen import generate_jwt
 import os
+
+logger = logging.getLogger('send_event')
+logger.setLevel(logging.INFO)
 
 service_account_path = os.environ['SERVICE_ACCOUNT_PATH']
 iss = os.environ['JWT_ISSUER']
@@ -12,6 +16,8 @@ aud = os.environ['EVENTS_AUD']
 timeout = 60
 
 def send_event(domain, peripheralId, deploymentId, value):
+	logger.debug("Sending an event")
+
 	auth_token = generate_jwt(service_account_path, iss, aud)
 	metadata = [('authorization', 'Bearer ' + auth_token)]
 	credentials = grpc.ssl_channel_credentials()

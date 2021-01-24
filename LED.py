@@ -15,7 +15,8 @@ import peripheral_pb2_grpc
 import google
 import grpc
 
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('sensor')
+logger.setLevel(logging.INFO)
 
 MAX_TRIES = 10
 TRY_SLEEP_SECONDS = 0.1
@@ -55,7 +56,7 @@ class PeripheralRequestHandler:
 			requests.get('https://www.google.com', timeout=5)
 			return True
 		except Exception as e:
-			logging.warn(f"Cannot reach google.com: {e}")
+			logger.error(f"Cannot reach google.com: {e}")
 			return False
 
 	def get_request_details(self):
@@ -64,16 +65,16 @@ class PeripheralRequestHandler:
 				with open(host_file, "r") as f:
 					unparsed_details = f.read()
 					if unparsed_details != "":
-						logging.info("Received pairing details")
+						logger.info("Received pairing details")
 
 						try:
 							self.request_details = json.loads(unparsed_details)
 						except Exception as e:
-							logging.error("Failed to parse details from file. {error}".format(error=e))
+							logger.error("Failed to parse details from file. {error}".format(error=e))
 					else:
-						logging.warn("Tried to read new host from host file, file was empty.")
+						logger.debug("Tried to read new host from host file, file was empty.")
 			except Exception as error:
-				logging.warn("Failed to read host from host file: {error}".format(error=error))
+				logger.error("Failed to read host from host file: {error}".format(error=error))
 		return self.request_details
 
 	"""
@@ -127,7 +128,7 @@ class PeripheralRequestHandler:
 			)
 
 		except Exception as error:
-			logging.warn("Failed to send peripheral event: {error}".format(error=error))
+			logger.error("Failed to send peripheral event: {error}".format(error=error))
 
 try:
 	GPIO.setmode(GPIO.BCM)
@@ -145,7 +146,7 @@ try:
 
 			tries = 0
 			while tries < MAX_TRIES and (not result.is_valid() or (result.is_valid() and result.temperature == 0)):
-				logging.warn('Result for %s not valid: %s' % (event_name, result.error_code))
+				logger.debug('Result for %s not valid: %s' % (event_name, result.error_code))
 				time.sleep(TRY_SLEEP_SECONDS)
 				result = instance.read()
 				tries += 1
@@ -153,7 +154,7 @@ try:
 			if result.is_valid() and result.temperature != 0:
 				celcius = result.temperature
 				farenheit = (celcius*9/5) + 32
-				logging.info('Temp %s: %s F, Humid: %s' % (event_name, farenheit, result.humidity))
+				logger.info('Temp %s: %s F, Humid: %s' % (event_name, farenheit, result.humidity))
 				request_handler.send_request(event_name, farenheit)
 
 

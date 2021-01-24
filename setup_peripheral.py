@@ -8,33 +8,48 @@ import time
 import RPi.GPIO as GPIO
 from device import receive_data
 
-logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger('blt_server')
+logger.setLevel(logging.INFO)
+
 pairing_trigger_channel = 19
 
-try:
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setwarnings(False)
-	GPIO.setup(pairing_trigger_channel, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-
+class SetupDetailsReceiver:
+	def __init__(self):
+		self.pairing_process = None
+	
 	def enable_limited_discoverability(channel):
-		logging.info("Spawning pairing session")
-		subprocess.Popen(['./pair.sh'])
-		logging.info("Waiting for peripheral setup information")
+		logger.debug("Spawning pairing session")
+
+		if self.pairing_process != None:
+			self.pairing_process.kill()
+			self.pairing_process = None
+
+		self.pairing_process = subprocess.Popen(['./pair.sh'])
+
+		logger.debug("Waiting for peripheral setup information")
+
 		setup_details = receive_data()
 
-		logging.info("Received setup details: {setup_details}. Exporting for use".format(setup_details=setup_details))
+		logger.info("Received setup details. Exporting for use".format(setup_details=setup_details))
 
 		if setup_details != None:
 			decoded_details = setup_details.decode("utf-8")
 			with open("/tmp/host.txt", "w") as f:
 				f.write(decoded_details)
 		else:
-			logging.warn("Setup details was empty: {setup_details}".format(setup_details=setup_details))
+			logger.error("Setup details was empty".format(setup_details=setup_details))
 
-	GPIO.add_event_detect(pairing_trigger_channel, GPIO.RISING, callback=enable_limited_discoverability)
+try:
+	GPIO.setmode(GPIO.BCM)
+	GPIO.setwarnings(False)
+	GPIO.setup(pairing_trigger_channel, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+
+	receiver = SetupDetailsReceiver()
+
+	GPIO.add_event_detect(pairing_trigger_channel, GPIO.RISING, callback=receiver.enable_limited_discoverability)
 
 	while True:
-		logging.info("she's alive")
+		logger.debug("she's alive")
 		time.sleep(2)
 finally:
 	GPIO.cleanup()
