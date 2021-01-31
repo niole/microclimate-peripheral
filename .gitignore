@@ -4,5 +4,5 @@ save_pid.txt
 save_setup_peripheral_pid.txt
 env_vars.sh
 nohup.out
-*pb2.py
-*pb2_grpc.py
+dbusmodified.txt
+get-pip.py

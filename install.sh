@@ -1,26 +1,23 @@
 #!/bin/bash
 
-sudo apt-get update
+apt-get update
 
 installPython() {
 	./install_python37.sh
 }
 
+installPip()
+{
+	if [[ "$(which pip)" == "" ]] && [[ "$(cat get-pip.py)" == "" ]]
+	then
+		echo "Installing pip for python 3.7"
+		curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+		python3.7 get-pip.py
+	fi
+}
+
 installBluezDependencies() {
-	sdp_exists=$(which sdptool)
-
-	if [ "$sdp_exists" == "" ]
-	then
-		apt update
-		apt install libbluetooth-dev
-
-	fi
-	if [ "$sdp_exists" == "" ]
-	then
-		echo "Failed to install bluez. sdptool does not exist"
-		exit 1
-	fi
-
+	apt install libbluetooth-dev
 }
 
 checkForhci0Device()
@@ -53,16 +50,12 @@ modifyDbusPath() {
 		echo "Done modifying $DBUS_PATH"
 
 		echo "done" > dbusmodified.txt
-
-		echo "Restarting this raspberry pi"
-
-		shutdown -r
 	fi
 }
 
 installPythonDeps()
 {
-	python3.5 -m pip install -r requirements.txt
+	python3.7 -m pip install -r requirements.txt
 }
 
 installWifiDependencies()
@@ -70,9 +63,25 @@ installWifiDependencies()
 	sudo apt-get install wpasupplicant
 }
 
+oneTimeSetup()
+{
+	./one_time_setup.sh
+}
+
+restartRaspberrypi()
+{
+	echo "Restarting this raspberry pi"
+	shutdown -r now
+}
+
 installPython
+installPip
 installWifiDependencies
 installBluezDependencies
 checkForhci0Device
 modifyDbusPath
 installPythonDeps
+
+oneTimeSetup
+
+restartRaspberrypi
